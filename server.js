@@ -7,12 +7,12 @@ const connectDB = require('./config/db')
 const errorHandler = require('./middleware/error')
 
 app.use(express.json())
-
+dotenv.config({ path: './config/config.env'})
 //Route files
 const bootcamps = require('./routes/bootcamps.js')
 //load config env vars
 
-dotenv.config({ path: './config/config.env'})
+
 
 //connect to database
 
