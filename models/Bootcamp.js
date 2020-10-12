@@ -127,7 +127,7 @@ BootcampSchema.pre('save',async function(next){
 
     }
 
-    //Do not save address in DB
+    //Do not save address in DB not needed adress returned from geocode
     this.address = undefined
     next();
 })
