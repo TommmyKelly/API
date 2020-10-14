@@ -14,18 +14,18 @@ exports.getBootcamps = asyncHandler(async (req, res, next)=>{
         const reqQuery = { ...req.query }
 
         //Fields to exclude
-        const removeFields= ['select','sort'];
+        const removeFields= ['select','sort','page','limit'];
 
         //loop over removeFields and delete form requesy query
         removeFields.forEach(param => delete reqQuery[param]);
 
-        console.log(reqQuery)
+       
 
         //Create quey string
         let queryStr = JSON.stringify(reqQuery)
 
         queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
-        console.log(queryStr)
+       
 
         query = Bootcamp.find(JSON.parse(queryStr))
 
@@ -42,8 +42,14 @@ exports.getBootcamps = asyncHandler(async (req, res, next)=>{
             query = query.sort('-createdAt')
         }
 
-       
+        //Pagination
+        const page = parseInt(req.query.page, 10) || 1;
+        const limit = parseInt(req.query.limit,10) || 100;
+        const skip = (page -1) * limit
 
+        query = query.skip(skip).limit(limit);
+       
+        //Excuting query
         const bootcamps = await query
         res.status(200).json({
             success: true,
